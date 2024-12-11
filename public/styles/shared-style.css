@@ -1,0 +1,51 @@
+.navbar-nav {
+  margin-left: auto;
+  font-size: 18px;
+}
+
+.navbar {
+  background-color: #343a40 !important;
+}
+
+.navbar .active .nav-link {
+  color: white;
+}
+
+.nav-link {
+  color: white;
+}
+
+.nav-link:hover {
+  color: white;
+}
+
+/* Footer */
+
+footer {
+  color: white;
+  background: #343a40;
+  font-size: 1.25rem;
+  padding: 50px;
+}
+
+footer ul {
+  list-style-type: none;
+  padding: 0;
+  align-content: center;
+}
+
+footer ul li {
+  border-left: 1px solid white;
+  padding: 0px 30px;
+}
+
+footer ul li:first-child {
+  border-left: none;
+}
+
+/* Footer */
+
+.row > * {
+  padding-left: 0;
+  padding-right: 0;
+}

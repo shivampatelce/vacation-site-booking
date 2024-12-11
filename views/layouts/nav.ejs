@@ -1,0 +1,88 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">
+      <img src="./img/logo.jpeg" height="60px" width="60px" alt="logo" />
+      Escape Heaven
+    </a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-toggle="collapse"
+      data-target="#navbarTogglerDemo01"
+      aria-controls="navbarTogglerDemo02"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+      <ul class="navbar-nav ml-auto mb-2 mb-lg-0 mr-4 align-items-center">
+        <li class="nav-item d-flex align-items-center">
+          <label
+            for="font-size-selector"
+            class="text-white me-2 mb-0 text-nowrap"
+            >Select Font Size:</label
+          >
+          <select id="font-size-selector" class="form-select form-select-sm">
+            <option value="14">Small</option>
+            <option value="16" selected>Default</option>
+            <option value="18">Medium</option>
+            <option value="20">Large</option>
+            <option value="22">Extra Large</option>
+          </select>
+        </li>
+        <% if(userType === 'ADMIN') { %>
+        <li class="nav-item p-2 <%= path == '/add-site' && 'active' %>">
+          <a class="nav-link" aria-current="page" href="/add-site">Add Site</a>
+        </li>
+        <% } else {%>
+        <li class="nav-item p-2 <%= path == '/' && 'active' %>">
+          <a class="nav-link" aria-current="page" href="/">Home</a>
+        </li>
+        <% } %> <% if(loggedIn && userType !== 'ADMIN') {%>
+        <li class="nav-item p-2 <%= path == '/booking-history' && 'active' %>">
+          <a class="nav-link" aria-current="page" href="/booking-history"
+            >Booking History</a
+          >
+        </li>
+        <% } %> <% if(loggedIn) {%>
+        <li class="nav-item p-2">
+          <a class="nav-link" aria-current="page" href="/logout">Logout</a>
+        </li>
+        <% } else { %>
+        <li class="nav-item p-2 <%= path == '/signin' && 'active' %>">
+          <a class="nav-link" aria-current="page" href="/signin">Sign In</a>
+        </li>
+        <% } %>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<script>
+  document.querySelector("nav button").addEventListener("click", () => {
+    document.querySelector("#navbarTogglerDemo01").classList.toggle("show");
+  });
+
+  const fontSizeSelector = document.getElementById("font-size-selector");
+  const body = document.body;
+
+  // Function to apply font size
+  function applyFontSize(fontSize) {
+    body.style.fontSize = `${fontSize}px`;
+    localStorage.setItem("preferredFontSize", fontSize); // Persist in localStorage
+  }
+
+  // Check for a saved font size in localStorage
+  const savedFontSize = localStorage.getItem("preferredFontSize");
+  if (savedFontSize) {
+    applyFontSize(savedFontSize);
+    fontSizeSelector.value = savedFontSize; // Update the dropdown to reflect the saved value
+  }
+
+  // Update font size on selection change
+  fontSizeSelector.addEventListener("change", (event) => {
+    const selectedFontSize = event.target.value;
+    applyFontSize(selectedFontSize);
+  });
+</script>

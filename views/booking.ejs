@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="./styles/shared-style.css" />
+    <title>Booking</title>
+  </head>
+  <body>
+    <%- include('layouts/nav') %>
+    <main>
+      <div class="container my-2 py-5">
+        <div class="row">
+          <div class="col-12 col-sm-8 col-md-6 m-auto">
+            <div class="card shadow">
+              <div class="card-body">
+                <form
+                  id="bookingForm"
+                  action="/booking?siteId=<%= siteId %>&price=<%= price %>"
+                  method="post"
+                  novalidate
+                >
+                  <div class="mb-3">
+                    <label for="cardNumber" class="form-label"
+                      >Credit Card Number</label
+                    >
+                    <input
+                      type="text"
+                      name="cardNumber"
+                      class="form-control"
+                      id="cardNumber"
+                      pattern="\d{16}"
+                      required
+                    />
+                    <div class="invalid-feedback">
+                      Please enter a valid 16-digit credit card number.
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col mb-3">
+                      <label for="expiryMonth" class="form-label"
+                        >Expiry Month</label
+                      >
+                      <input
+                        type="number"
+                        name="expiryMonth"
+                        class="form-control"
+                        id="expiryMonth"
+                        min="1"
+                        max="12"
+                        required
+                      />
+                      <div class="invalid-feedback">
+                        Month must be between 1 and 12.
+                      </div>
+                    </div>
+
+                    <div class="col mb-3">
+                      <label for="expiryYear" class="form-label"
+                        >Expiry Year</label
+                      >
+                      <input
+                        type="number"
+                        name="expiryYear"
+                        class="form-control"
+                        id="expiryYear"
+                        min="2024"
+                        required
+                      />
+                      <div class="invalid-feedback">
+                        Year must be 2024 or later.
+                      </div>
+                    </div>
+
+                    <div class="col mb-3">
+                      <label for="cvv" class="form-label">CVV</label>
+                      <input
+                        type="password"
+                        name="cvv"
+                        class="form-control"
+                        id="cvv"
+                        pattern="\d{3}"
+                        required
+                      />
+                      <div class="invalid-feedback">
+                        Please enter a valid 3-digit CVV.
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="my-3">
+                    <label for="numberOfNights" class="form-label"
+                      >Number Of Nights</label
+                    >
+                    <input
+                      type="number"
+                      name="numberOfNights"
+                      class="form-control"
+                      id="numberOfNights"
+                      value="1"
+                      min="1"
+                      required
+                    />
+                    <div class="invalid-feedback">
+                      Number of nights must be at least 1.
+                    </div>
+                  </div>
+
+                  <span id="price" style="display: none"><%= price %></span>
+
+                  <h4>Total: $<span id="amount"><%= price %></span></h4>
+
+                  <button type="submit" class="btn btn-primary w-100">
+                    Pay
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <%- include('layouts/footer'); -%> <%- include('layouts/scripts'); -%>
+    <script>
+      document
+        .getElementById("numberOfNights")
+        .addEventListener("input", (event) => {
+          const numberOfNights = event.target.value;
+          const price = document.getElementById("price").textContent;
+          document.getElementById("amount").textContent =
+            numberOfNights * price;
+        });
+
+      document
+        .getElementById("bookingForm")
+        .addEventListener("submit", (event) => {
+          const form = event.target;
+          if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+            form.querySelectorAll(".form-control").forEach((input) => {
+              if (!input.validity.valid) {
+                const errorMessage = input.nextElementSibling;
+                if (input.id === "cardNumber") {
+                  errorMessage.textContent =
+                    "Credit Card Number must be exactly 16 digits.";
+                } else if (input.id === "expiryMonth") {
+                  errorMessage.textContent =
+                    "Expiry Month should be between 1 and 12.";
+                } else if (input.id === "expiryYear") {
+                  errorMessage.textContent =
+                    "Expiry Year cannot be earlier than 2024.";
+                } else if (input.id === "cvv") {
+                  errorMessage.textContent = "CVV must be exactly 3 digits.";
+                } else if (input.id === "numberOfNights") {
+                  errorMessage.textContent =
+                    "Number of Nights should be at least 1.";
+                }
+              }
+            });
+          }
+          form.classList.add("was-validated");
+        });
+    </script>
+  </body>
+</html>
